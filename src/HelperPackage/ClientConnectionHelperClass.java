@@ -16,9 +16,9 @@ public class ClientConnectionHelperClass {
 			System.exit(1);
 		}
 		return address;
+	}
 	
-	
-	private SocketClient connection(String address, port)
+	private SocketClient connection(String address, port){
 		Socket client = null;
 		try {
 			client = new Socket(address,port);		
@@ -27,7 +27,9 @@ public class ClientConnectionHelperClass {
 			System.out.println("Connection Broken");
 			e.printStackTrace();
 			System.exit(1);
+		}
 		return client;
+	}
 	
 	private ObjectOutputStream oos writing(String client.getOutputStream())
 		ObjectOutputStream oos = null;
@@ -38,7 +40,7 @@ public class ClientConnectionHelperClass {
 			e.printStackTrace();
 		}
 		return oos;
-	
+	}
 	//Each node acts as a client to all its neighboring nodes
 	public ClientConnectionHelperClass(ConfigStructure mapObject, int curNode) {
 		for(int i=0;i<mapObject.numOfNodes;i++){
