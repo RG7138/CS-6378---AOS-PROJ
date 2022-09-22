@@ -13,7 +13,7 @@ public class ConfigStructure implements Serializable  {
 	
 	//Variables required for MAP Protocol
 	public int id;
-	public int[][] adjMtx;
+	public int[][] adjacent;
 	ArrayList<Integer> neighbors;
 	public int[] vector;
 	boolean active;
