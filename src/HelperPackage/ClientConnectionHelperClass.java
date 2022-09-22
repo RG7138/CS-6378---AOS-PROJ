@@ -49,8 +49,8 @@ public class ClientConnectionHelperClass {
 	public ClientConnectionHelperClass(ConfigStructure mapObject, int current) {
 		for(int i=0;i<mapObject.numOfNodes;i++){
 			if(mapObject.adjacent[current][i] == 1){
-				String hostName = mapObject.nodeInfo.get(i).host;
-				int port = mapObject.nodeInfo.get(i).port;
+				String hostName = mapObject.information.get(i).host;
+				int port = mapObject.information.get(i).port;
 				InetAddress address = null;
 				
 				address = addressResolution(hostName);
