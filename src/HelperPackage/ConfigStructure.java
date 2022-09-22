@@ -14,17 +14,17 @@ public class ConfigStructure implements Serializable  {
 	//Variables required for MAP Protocol
 	public int id;
 	public int[][] adjMtx;
-	ArrayList<Integer> neighbors;
+	public ArrayList<Integer> neighbors;
 	public int[] vector;
-	boolean active;
-	int msgSentCount;
+	public boolean active;
+	public int msgSentCount;
 	
 	public int numOfNodes;
-	int minPerActive;
-	int maxPerActive;
-	int minSendDelay;
+	public int minPerActive;
+	public int maxPerActive;
+	public int minSendDelay;
 	int snapshotDelay;
-	int maxNumber;
+	public int maxNumber;
 	
 	//Variables required for ChandyLamport Protocol
 	Color color;	
@@ -47,7 +47,7 @@ public class ConfigStructure implements Serializable  {
 	
 	// Create all the output streams associated with each socket 
 	//Mapping between each sent message with object output stream
-	HashMap<Integer,ObjectOutputStream> oStream;
+	public HashMap<Integer,ObjectOutputStream> oStream;
 
 	// Mapping between processes and StMsg which stores all state messages
 	//HashMap<Integer,StateMessage> stateMsg;	

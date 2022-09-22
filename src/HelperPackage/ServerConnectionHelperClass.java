@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import MessagePackage.ReceiveMessageClass;
+
 public class ServerConnectionHelperClass{
 
 	ServerSocket listener = null;
@@ -25,6 +27,7 @@ public class ServerConnectionHelperClass{
 					System.out.println("Connection Broken");
 					System.exit(1);
 				}
+				new ReceiveMessageClass(socket,mapObject).start();
 			}
 		}
 		finally {
@@ -39,10 +42,11 @@ public class ServerConnectionHelperClass{
 	private ServerSocket CreateServer(int serverPort, String host) {
 		
 		try {
-			//System.out.println(serverPort);
-			//addr = listener.getInetAddress();
-			//System.out.println(addr);
+			
 			listener = new ServerSocket(serverPort,-1,InetAddress.getByName(mapObject.nodes.get(mapObject.id).host));
+			System.out.println(serverPort);
+			addr = listener.getInetAddress();
+			System.out.println(addr);
 		}
 		catch(BindException e) {
 			System.out.println("Failed Server Connection on Node" + mapObject.id + " : " + e.getMessage() + ", Port : " + serverPort);
@@ -70,7 +74,7 @@ public class ServerConnectionHelperClass{
 		serverPort = mapObject.nodes.get(mapObject.id).port;
 		String host = mapObject.nodes.get(mapObject.id).host;
 		
-		ServerSocket listener = null;
+		//ServerSocket listener = null;
 		listener = CreateServer(serverPort, host);
 		
 		ServerSleep(10000);

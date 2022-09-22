@@ -21,11 +21,11 @@ public class ClientConnectionHelperClass {
 		return address;
 	}
 		
-	private Socket connection(InetAddress address,int port) {
+	private Socket connection(InetAddress address,int port,String hostName) {
 		Socket client = null;
 		try {
 			client = new Socket(address,port);		
-			System.out.println("Client Connection Achieved(address,port):"+address.getHostAddress()+" "+port);
+			System.out.println("Client Connection Achieved(address,port):"+address.getHostAddress()+"("+ hostName +")"+" "+port);
 		} catch (IOException e) {
 			System.out.println("Connection Broken");
 			e.printStackTrace();
@@ -58,7 +58,7 @@ public class ClientConnectionHelperClass {
 
 				Socket client = null;
 				
-				client = connection(address,port);
+				client = connection(address,port,hostName);
 				//Send client request to all neighboring nodes
 				mapObject.channels.put(i, client);
 				mapObject.neighbors.add(i);

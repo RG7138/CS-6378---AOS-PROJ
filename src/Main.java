@@ -5,11 +5,12 @@ import HelperPackage.ConfigStructure;
 import HelperPackage.ParseConfigFileHelperClass;
 import HelperPackage.ServerConnectionHelperClass;
 import HelperPackage.SpanningTreeHelperClass;
+import MessagePackage.SendMessageClass;
 
 public class Main {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
-		//final int NODE_ZERO = 0;
+		final int NODE_ZERO = 0;
 		
 		//Parse through config.txt file
 		ConfigStructure mapObject = ParseConfigFileHelperClass.ParseConfigFile(args[1]);
@@ -51,12 +52,11 @@ public class Main {
 		}
 
 		//Initially node 0 is active therefore if this node is 0 then it should be active
-//		if(curNode == NODE_ZERO){
-//			mapObject.active = true;		
-//			//Call Chandy Lamport protocol if it is node 0
-//			new CL_Protocol_Thread(mapObject).start();		
-//			new SendMessageThread(mapObject).start();
-//		}
+		if(curNode == NODE_ZERO){
+			mapObject.active = true;		
+				
+			new SendMessageClass(mapObject).start();
+		}
 		
 		server.AcceptClientConnections(); //Listen for client connections
 		
