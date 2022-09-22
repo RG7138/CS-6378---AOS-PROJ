@@ -12,7 +12,7 @@ public class Main {
 		//final int NODE_ZERO = 0;
 		
 		//Parse through config.txt file
-		ConfigStructure mapObject = ParseConfigFileHelperClass.readConfigFile(args[1]);
+		ConfigStructure mapObject = ParseConfigFileHelperClass.ParseConfigFile(args[1]);
 		
 		// Get the node number of the current Node
 		mapObject.id = Integer.parseInt(args[0]);
@@ -58,7 +58,7 @@ public class Main {
 //			new SendMessageThread(mapObject).start();
 //		}
 		
-		server.listenforinput(); //Listen for client connections
+		server.AcceptClientConnections(); //Listen for client connections
 		
 	}
 }
