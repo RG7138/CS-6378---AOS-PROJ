@@ -11,9 +11,9 @@ public class SpanningTreeHelperClass {
 	}
 	
 	//Function that implements bfs to build spanning tree
-	public static void constructNodeTree(int[][] adjMtx){
-		boolean[] visited = new boolean[adjMtx.length];
-		parent = new int[adjMtx.length];
+	public static void TreeMtx(int[][] adjacent){
+		boolean[] visited = new boolean[adjacent.length];
+		parent = new int[adjacent.length];
 		Queue<Integer> queue = new LinkedList<Integer>();
 		queue.add(0);
 		parent[0] = 0;
@@ -22,8 +22,8 @@ public class SpanningTreeHelperClass {
 		visited[0] = true;
 		while(!queue.isEmpty()){
 			int node = queue.remove();
-			for(int i=0;i<adjMtx[node].length;i++){
-				if(adjMtx[node][i] == 1 && visited[i] == false){
+			for(int i=0;i<adjacent[node].length;i++){
+				if(adjacent[node][i] == 1 && visited[i] == false){
 					queue.add(i);
 					SpanningTreeHelperClass.parent[i] = node;
 					visited[i] = true;
