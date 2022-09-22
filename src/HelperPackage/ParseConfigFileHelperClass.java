@@ -9,7 +9,7 @@ public class ParseConfigFileHelperClass {
 	//Remoce this for part 2 and 3
 	public static ConfigStructure mapFile;
 	
-	public static ConfigStructure readConfigFile(String name) throws IOException{
+	public static ConfigStructure readtxt(String name) throws IOException{
 		mapFile = new ConfigStructure();
 		int node_count = 0,next = 0;
 		// Keeps track of current node
@@ -113,7 +113,7 @@ public class ParseConfigFileHelperClass {
 	}
 	
 //	public static void main(String[] args) throws IOException {
-//		MapProtocol m = ReadConfigFile.readConfigFile("config1.txt");
+//		MapProtocol m = readtxt.readtxt("config1.txt");
 //		
 //		for(Node n : m.nodes) {
 //			System.out.println(n.host + " " + n.nodeId + " " + n.port);
