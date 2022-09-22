@@ -46,9 +46,9 @@ public class ClientConnectionHelperClass {
 	}
 	
 	//Each node acts as a client to all its neighboring nodes
-	public ClientConnectionHelperClass(ConfigStructure mapObject, int current) {
+	public ClientConnectionHelperClass(ConfigStructure mapObject, int currentNode) {
 		for(int i=0;i<mapObject.numOfNodes;i++){
-			if(mapObject.adjacent[current][i] == 1){
+			if(mapObject.adjacent[currentNode][i] == 1){
 				String hostName = mapObject.information.get(i).host;
 				int port = mapObject.information.get(i).port;
 				InetAddress address = null;
