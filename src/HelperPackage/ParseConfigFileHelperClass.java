@@ -41,7 +41,7 @@ public class ParseConfigFileHelperClass {
 					mapFile.minSendDelay = Integer.parseInt(config_input[3]);
 					mapFile.snapshotDelay = Integer.parseInt(config_input[4]);
 					mapFile.maxNumber = Integer.parseInt(config_input[5]);
-					mapFile.adjMtx = new int[mapFile.numOfNodes][mapFile.numOfNodes];
+					mapFile.adjacent = new int[mapFile.numOfNodes][mapFile.numOfNodes];
 					next++;
 				}
 				else if(next == 1 && node_count < mapFile.numOfNodes)
@@ -60,8 +60,8 @@ public class ParseConfigFileHelperClass {
 				else if(next == 2) {
 					for(String i : config_input){
 						if(curNode != Integer.parseInt(i)) {
-							mapFile.adjMtx[curNode][Integer.parseInt(i)] = 1;
-							mapFile.adjMtx[Integer.parseInt(i)][curNode] = 1;
+							mapFile.adjacent[curNode][Integer.parseInt(i)] = 1;
+							mapFile.adjacent[Integer.parseInt(i)][curNode] = 1;
 						}
 					}
 					curNode++;
@@ -106,7 +106,7 @@ public class ParseConfigFileHelperClass {
 		System.out.println("\nAdjancy Matrix for spanning Tree->");
 		for(int i=0;i<m.numOfNodes;i++){
 			for(int j=0;j<m.numOfNodes;j++){
-				System.out.print(m.adjMtx[i][j]+"  ");
+				System.out.print(m.adjacent[i][j]+"  ");
 			}
 			System.out.println();
 		}
@@ -127,7 +127,7 @@ public class ParseConfigFileHelperClass {
 //		
 //		for(int i=0;i<m.numOfNodes;i++){
 //			for(int j=0;j<m.numOfNodes;j++){
-//				System.out.print(m.adjMtx[i][j]+"  ");
+//				System.out.print(m.adjacent[i][j]+"  ");
 //			}
 //			System.out.println();
 //		}
