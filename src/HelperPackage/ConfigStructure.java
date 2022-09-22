@@ -9,7 +9,7 @@ import java.util.Set;
 enum Color { RED,BLUE};
 @SuppressWarnings("serial")
 public class ConfigStructure implements Serializable  {
-	public String configFileName;
+	public String title;
 	
 	//Variables required for MAP Protocol
 	public int id;
@@ -33,7 +33,7 @@ public class ConfigStructure implements Serializable  {
 	public static String outFile;
 
 	//Mapping between process number as keys and <id,host,port> as value
-	public HashMap<Integer,NodeStructure> nodeInfo;
+	public HashMap<Integer,NodeStructure> information;
 	
 	//ArrayList which holds the total processes(nodes) 
 	public ArrayList<NodeStructure> nodes;
@@ -73,7 +73,7 @@ public class ConfigStructure implements Serializable  {
 		saveChannelMsg=0;
 		isFirstSnapshot = true;
 		nodes = new ArrayList<NodeStructure>();
-		nodeInfo = new HashMap<Integer,NodeStructure>();
+		information = new HashMap<Integer,NodeStructure>();
 		channels = new HashMap<Integer,Socket>();
 		oStream = new HashMap<Integer,ObjectOutputStream>();
 		globalSnapshots = new ArrayList<int[]>();
