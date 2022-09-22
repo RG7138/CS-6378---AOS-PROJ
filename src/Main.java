@@ -12,7 +12,7 @@ public class Main {
 		//final int NODE_ZERO = 0;
 		
 		//Parse through config.txt file
-		ConfigStructure mapObject = ParseConfigFileHelperClass.readConfigFile(args[1]);
+		ConfigStructure mapObject = ParseConfigFileHelperClass.readtxt(args[1]);
 		
 		// Get the node number of the current Node
 		mapObject.id = Integer.parseInt(args[0]);
@@ -20,16 +20,16 @@ public class Main {
 		int current = mapObject.id;
 		
 		//Get the configuration file name from command line
-		mapObject.configFileName = args[1];
+		mapObject.title = args[1];
 		
-		ConfigStructure.outFile = mapObject.configFileName.substring(0, mapObject.configFileName.lastIndexOf('.'));
+		ConfigStructure.outFile = mapObject.title.substring(0, mapObject.title.lastIndexOf('.'));
 		
 		//Build converge cast spanning tree
 		SpanningTreeHelperClass.TreeMtx(mapObject.adjacent);
 		
 		// Transfer the collection of nodes from ArrayList to hash map nodes
 		for(int i=0;i<mapObject.nodes.size();i++){
-			mapObject.nodeInfo.put(mapObject.nodes.get(i).nodeId, mapObject.nodes.get(i));
+			mapObject.information.put(mapObject.nodes.get(i).nodeId, mapObject.nodes.get(i));
 		}
 		
 		//Create a server socket 
