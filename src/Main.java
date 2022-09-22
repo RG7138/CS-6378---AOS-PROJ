@@ -17,7 +17,7 @@ public class Main {
 		// Get the node number of the current Node
 		mapObject.id = Integer.parseInt(args[0]);
 		
-		int curNode = mapObject.id;
+		int current = mapObject.id;
 		
 		//Get the configuration file name from command line
 		mapObject.configFileName = args[1];
@@ -25,7 +25,7 @@ public class Main {
 		ConfigStructure.outFile = mapObject.configFileName.substring(0, mapObject.configFileName.lastIndexOf('.'));
 		
 		//Build converge cast spanning tree
-		SpanningTreeHelperClass.constructNodeTree(mapObject.adjMtx);
+		SpanningTreeHelperClass.TreeMtx(mapObject.adjacent);
 		
 		// Transfer the collection of nodes from ArrayList to hash map nodes
 		for(int i=0;i<mapObject.nodes.size();i++){
@@ -36,7 +36,7 @@ public class Main {
 		ServerConnectionHelperClass server = new ServerConnectionHelperClass(mapObject);
 		
 		//Create channels and keep it till the end
-		new ClientConnectionHelperClass(mapObject, curNode);
+		new ClientConnectionHelperClass(mapObject, current);
 
 		mapObject.vector = new int[mapObject.numOfNodes];
 
@@ -51,7 +51,7 @@ public class Main {
 		}
 
 		//Initially node 0 is active therefore if this node is 0 then it should be active
-//		if(curNode == NODE_ZERO){
+//		if(current == NODE_ZERO){
 //			mapObject.active = true;		
 //			//Call Chandy Lamport protocol if it is node 0
 //			new CL_Protocol_Thread(mapObject).start();		
