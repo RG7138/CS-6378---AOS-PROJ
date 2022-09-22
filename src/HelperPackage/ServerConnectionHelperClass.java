@@ -27,7 +27,7 @@ public class ServerConnectionHelperClass{
 					System.out.println("Connection Broken");
 					System.exit(1);
 				}
-				new ReceiveMessageClass(socket,mapObject).start();
+//				new ReceiveMessageClass(socket,mapObject).start();
 			}
 		}
 		finally {

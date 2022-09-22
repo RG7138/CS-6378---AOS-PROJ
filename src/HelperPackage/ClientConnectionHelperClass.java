@@ -48,9 +48,9 @@ public class ClientConnectionHelperClass {
 	//Each node acts as a client to all its neighboring nodes
 	public ClientConnectionHelperClass(ConfigStructure mapObject, int curNode) {
 		for(int i=0;i<mapObject.numOfNodes;i++){
-			if(mapObject.adjMtx[curNode][i] == 1){
-				String hostName = mapObject.nodeInfo.get(i).host;
-				int port = mapObject.nodeInfo.get(i).port;
+			if(mapObject.LinkMatrix[curNode][i] == 1){
+				String hostName = mapObject.information.get(i).host;
+				int port = mapObject.information.get(i).port;
 				InetAddress address = null;
 				
 				address = addressResolution(hostName);
