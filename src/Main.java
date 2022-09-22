@@ -14,10 +14,10 @@ public class Main {
 		//Parse through config.txt file
 		ConfigStructure mapObject = ParseConfigFileHelperClass.readtxt(args[1]);
 		
-		// Get the node number of the current Node
+		// Get the node number of the currentNode Node
 		mapObject.id = Integer.parseInt(args[0]);
 		
-		int current = mapObject.id;
+		int currentNode = mapObject.id;
 		
 		//Get the configuration file name from command line
 		mapObject.title = args[1];
@@ -36,7 +36,7 @@ public class Main {
 		ServerConnectionHelperClass server = new ServerConnectionHelperClass(mapObject);
 		
 		//Create channels and keep it till the end
-		new ClientConnectionHelperClass(mapObject, current);
+		new ClientConnectionHelperClass(mapObject, currentNode);
 
 		mapObject.vector = new int[mapObject.numOfNodes];
 
@@ -51,7 +51,7 @@ public class Main {
 		}
 
 		//Initially node 0 is active therefore if this node is 0 then it should be active
-//		if(current == NODE_ZERO){
+//		if(currentNode == NODE_ZERO){
 //			mapObject.active = true;		
 //			//Call Chandy Lamport protocol if it is node 0
 //			new CL_Protocol_Thread(mapObject).start();		
