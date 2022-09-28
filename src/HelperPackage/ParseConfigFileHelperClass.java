@@ -52,12 +52,12 @@ public class ParseConfigFileHelperClass {
 					mapFile.minSendDelay = Integer.parseInt(ParsedValues[3]);
 					mapFile.snapshotDelay = Integer.parseInt(ParsedValues[4]);
 					mapFile.maxNumber = Integer.parseInt(ParsedValues[5]);
-					mapFile.adjMtx = new int[mapFile.numOfNodes][mapFile.numOfNodes];
+					mapFile.LinkMatrix = new int[mapFile.numOfNodes][mapFile.numOfNodes];
 					nextConfigInfo++;
 				}
 				else if((nextConfigInfo == 1) && (Counter < mapFile.numOfNodes))
 				{	
-					if(ParsedValues[1].contains("utdallas.edu")) {
+					if(ParsedValues[1].contains("utdallas.edu") || ParsedValues[1].contains("127.0.0.1")) {
 						mapFile.nodes.add(new NodeStructure(Integer.parseInt(ParsedValues[0]),ParsedValues[1],Integer.parseInt(ParsedValues[2])));
 					}
 					else {
@@ -71,8 +71,8 @@ public class ParseConfigFileHelperClass {
 				else if(nextConfigInfo == 2) {
 					for(String i : ParsedValues){
 						if(NodeId != Integer.parseInt(i)) {
-							mapFile.adjMtx[NodeId][Integer.parseInt(i)] = 1;
-							mapFile.adjMtx[Integer.parseInt(i)][NodeId] = 1;
+							mapFile.LinkMatrix[NodeId][Integer.parseInt(i)] = 1;
+							mapFile.LinkMatrix[Integer.parseInt(i)][NodeId] = 1;
 						}
 					}
 					NodeId++;
@@ -114,7 +114,7 @@ public class ParseConfigFileHelperClass {
 		System.out.println("\nAdjancy Matrix for spanning Tree->");
 		for(int i=0;i<m.numOfNodes;i++){
 			for(int j=0;j<m.numOfNodes;j++){
-				System.out.print(m.adjMtx[i][j]+"  ");
+				System.out.print(m.LinkMatrix[i][j]+"  ");
 			}
 			System.out.println();
 		}

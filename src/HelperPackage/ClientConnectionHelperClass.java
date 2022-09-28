@@ -21,11 +21,11 @@ public class ClientConnectionHelperClass {
 		return address;
 	}
 		
-	private Socket connection(InetAddress address,int port) {
+	private Socket connection(InetAddress address,int port,String hostName) {
 		Socket client = null;
 		try {
 			client = new Socket(address,port);		
-			System.out.println("Client Connection Achieved(address,port):"+address.getHostAddress()+" "+port);
+			System.out.println("Client Connection Achieved(address,port):"+address.getHostAddress()+"("+ hostName +")"+" "+port);
 		} catch (IOException e) {
 			System.out.println("Connection Broken");
 			e.printStackTrace();
@@ -48,9 +48,9 @@ public class ClientConnectionHelperClass {
 	//Each node acts as a client to all its neighboring nodes
 	public ClientConnectionHelperClass(ConfigStructure mapObject, int curNode) {
 		for(int i=0;i<mapObject.numOfNodes;i++){
-			if(mapObject.adjMtx[curNode][i] == 1){
-				String hostName = mapObject.nodeInfo.get(i).host;
-				int port = mapObject.nodeInfo.get(i).port;
+			if(mapObject.LinkMatrix[curNode][i] == 1){
+				String hostName = mapObject.information.get(i).host;
+				int port = mapObject.information.get(i).port;
 				InetAddress address = null;
 				
 				address = addressResolution(hostName);
@@ -58,7 +58,7 @@ public class ClientConnectionHelperClass {
 
 				Socket client = null;
 				
-				client = connection(address,port);
+				client = connection(address,port,hostName);
 				//Send client request to all neighboring nodes
 				mapObject.channels.put(i, client);
 				mapObject.neighbors.add(i);
