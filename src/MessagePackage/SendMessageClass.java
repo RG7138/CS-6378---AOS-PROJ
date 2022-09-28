@@ -47,7 +47,7 @@ public class SendMessageClass extends Thread{
 			synchronized(mapObject){
 				
 				//get a random neigbour id to send message
-				int NeighborNodeID = this.getRandomNumber(0,mapObject.neighbors.size()-1);
+				int NeighborNodeID = this.randomValueGenerator(0,mapObject.neighbors.size()-1);
 				int curNeighbor = mapObject.neighbors.get(NeighborNodeID);
 
 				if(mapObject.active == true){
@@ -93,11 +93,11 @@ public class SendMessageClass extends Thread{
 		int MessagesCount = -1;
 		int minSendDelay = 0;
 		synchronized(mapObject){
-			MessagesCount = this.getRandomNumber(mapObject.minPerActive,mapObject.maxPerActive);
+			MessagesCount = this.randomValueGenerator(mapObject.minPerActive,mapObject.maxPerActive);
 			
 			// If random number is 0 we again try to get a random number, as we can not have 0 as the number of messages to be sent
 			if(MessagesCount == 0){
-				MessagesCount = this.getRandomNumber(mapObject.minPerActive + 1,mapObject.maxPerActive);
+				MessagesCount = this.randomValueGenerator(mapObject.minPerActive + 1,mapObject.maxPerActive);
 			}
 			minSendDelay = mapObject.minSendDelay;
 		}
@@ -120,7 +120,7 @@ public class SendMessageClass extends Thread{
 		}
 	}
 	// Function to generate random number in a given range
-	int getRandomNumber(int min,int max){
+	int randomValueGenerator(int min,int max){
 		Random rand = new Random();
 		int randomNum = rand.nextInt((max - min) + 1) + min;
 		return randomNum;
