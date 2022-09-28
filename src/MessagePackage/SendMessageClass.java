@@ -2,6 +2,9 @@ package MessagePackage;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Random;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 import HelperPackage.ConfigStructure;
 
@@ -10,6 +13,79 @@ public class SendMessageClass extends Thread{
 	public SendMessageClass(ConfigStructure mapObject) {
 		this.mapObject = mapObject;
 	}
+	
+	public void writeMsgtofile(ApplicatonMessage tmp,int curNeighbor) {
+		String fileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
+		
+		mapObject.active = true; 
+		try {
+			File file = new File(fileName);
+			FileWriter fW;
+			if(file.exists()){
+				fW = new FileWriter(file,true);
+			}
+			else
+			{
+				fW = new FileWriter(file);
+			}
+			BufferedWriter bW = new BufferedWriter(fW);
+			
+			bW.write("Message -" +"'"+ tmp.msg  +"'" + " sent to Node:"+ curNeighbor+"\n");
+			
+			bW.close();
+			
+		}
+		catch(Exception e) {
+			System.out.println("Error writing to file '" + fileName + "'");
+		}
+		
+	}
+	
+	public void sendMsgstoNeighbours(int minSendDelay,int randMessages) {
+		//Send the messages to random neighbors each time and add minSendDelay between each send
+				for(int i=0;i<randMessages;i++){
+					synchronized(mapObject){
+						//get a random neigbour
+						int randNeighborNode = this.getRandomNumber(0,mapObject.neighbors.size()-1);
+						int curNeighbor = mapObject.neighbors.get(randNeighborNode);
+
+						if(mapObject.active == true){
+							//send application message
+							ApplicatonMessage m = new ApplicatonMessage(); 
+							// Implementing Vector clock protocol
+							
+							String fileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
+							m.nodeId = mapObject.id;
+					
+							//Send object data to the neighbor
+							try {
+								writeMsgtofile(m,curNeighbor);
+								
+								//System.out.println("Message -" +"'"+ m.msg  +"'"+ " sent to Node:"+ curNeighbor+"\n");
+								
+								ObjectOutputStream oos = mapObject.oStream.get(curNeighbor);
+								oos.writeObject(m);	
+								oos.flush();
+								
+							} catch (IOException e) {
+								e.printStackTrace();
+							}	
+							//increment msgSentCount
+							mapObject.msgSentCount++;
+						}
+					}
+					// Wait for minimum sending delay before sending another message
+					try{
+						Thread.sleep(minSendDelay);
+					}
+					catch (Exception e) {
+						System.out.println("Error in SendMessages");
+						e.printStackTrace();
+					}
+				}
+	}
+	
+	
 	void sendMessages() throws InterruptedException{
 
 		// get a random number between minPerActive to maxPerActive to send that many messages
@@ -23,43 +99,9 @@ public class SendMessageClass extends Thread{
 			}
 			minSendDelay = mapObject.minSendDelay;
 		}
-
-		//Send the messages to random neighbors each time and add minSendDelay between each send
-		for(int i=0;i<randMessages;i++){
-			synchronized(mapObject){
-				//get a random neigbour
-				int randNeighborNode = this.getRandomNumber(0,mapObject.neighbors.size()-1);
-				int curNeighbor = mapObject.neighbors.get(randNeighborNode);
-
-				if(mapObject.active == true){
-					//send application message
-					AppMessage m = new AppMessage(); 
-					// Implementing Vector clock protocol
-					
-					m.nodeId = mapObject.id;
-			
-					//Send object data to the neighbor
-					try {
-						ObjectOutputStream oos = mapObject.oStream.get(curNeighbor);
-						oos.writeObject(m);	
-						oos.flush();
-						System.out.println("Message -" + m.msg + " sent to Node:"+ curNeighbor);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}	
-					//increment msgSentCount
-					mapObject.msgSentCount++;
-				}
-			}
-			// Wait for minimum sending delay before sending another message
-			try{
-				Thread.sleep(minSendDelay);
-			}
-			catch (InterruptedException e) {
-				System.out.println("Error in SendMessages");
-				e.printStackTrace();
-			}
-		}
+		
+		sendMsgstoNeighbours(minSendDelay,randMessages);
+		
 		synchronized(mapObject){
 			// After sending minPerActive to maxPerActive number of messages node should be passive
 			mapObject.active = false;

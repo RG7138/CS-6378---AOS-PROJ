@@ -21,6 +21,8 @@ public class Main {
 		//Get the configuration file name from command line
 		mapObject.configFile = args[1];
 		
+		ConfigStructure.outFile = mapObject.configFile.substring(0,mapObject.configFile.lastIndexOf('.'));
+		
 		//Build converge cast spanning tree
 		SpanningTreeHelperClass.constructNodeTree(mapObject.LinkMatrix);
 		
@@ -42,12 +44,12 @@ public class Main {
 			System.out.println("Error occured while parsing ConfigFile:->"+e);
 		}
 
-//		//Initially node 0 is active therefore if this node is 0 then it should be active
-//		if(curNode == 0){
-//			mapObject.active = true;		
-//				
-//			new SendMessageClass(mapObject).start();
-//		}
+		//Initially node 0 is active therefore if this node is 0 then it should be active
+		if(curNode == 0){
+			mapObject.active = true;		
+				
+			new SendMessageClass(mapObject).start();
+		}
 		
 		server.AcceptClientConnections(); //Listen for client connections
 		

@@ -24,6 +24,7 @@ public class ConfigStructure implements Serializable  {
 	public int maxNumber;
 	
 	public String configFile;
+	public static String outFile;
 	
 	//Mapping between process number as keys and NodeStructure as value
 	public HashMap<Integer,NodeStructure> information;
