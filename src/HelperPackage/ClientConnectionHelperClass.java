@@ -69,6 +69,6 @@ public class ClientConnectionHelperClass {
 				mapObject.oStream.put(i, oos);	
 			}
 		}
-		System.out.println("Sample");
+		//System.out.println("Sample");
 	}
 }
