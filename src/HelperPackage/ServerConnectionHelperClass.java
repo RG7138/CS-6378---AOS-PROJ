@@ -5,9 +5,11 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import MessagePackage.ReceiveMessageClass;
+
 public class ServerConnectionHelperClass{
 
-	
+	ServerSocket listener = null;
 	Socket socket = null;
 	int serverPort;
 	private ConfigStructure mapObject;
@@ -15,13 +17,36 @@ public class ServerConnectionHelperClass{
 	InetAddress addr1;
 	InetAddress addr2;
 	
-	private ServerSocket CreateServer(int serverPort, String host) {
-		ServerSocket listener = null;
+	public void AcceptClientConnections(){
+		//Listen for client requests and accept connections
 		try {
-			//System.out.println(serverPort);
-			//addr = listener.getInetAddress();
-			//System.out.println(addr);
+			while (true) {
+				try {
+					socket = listener.accept();
+				} catch (IOException e1) {
+					System.out.println("Connection Broken");
+					System.exit(1);
+				}
+//				new ReceiveMessageClass(socket,mapObject).start();
+			}
+		}
+		finally {
+			try {
+				listener.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private ServerSocket CreateServer(int serverPort, String host) {
+		
+		try {
+			
 			listener = new ServerSocket(serverPort,-1,InetAddress.getByName(mapObject.nodes.get(mapObject.id).host));
+			System.out.println(serverPort);
+			addr = listener.getInetAddress();
+			System.out.println(addr);
 		}
 		catch(BindException e) {
 			System.out.println("Failed Server Connection on Node" + mapObject.id + " : " + e.getMessage() + ", Port : " + serverPort);
@@ -49,30 +74,11 @@ public class ServerConnectionHelperClass{
 		serverPort = mapObject.nodes.get(mapObject.id).port;
 		String host = mapObject.nodes.get(mapObject.id).host;
 		
-		ServerSocket listener = null;
+		//ServerSocket listener = null;
 		listener = CreateServer(serverPort, host);
 		
 		ServerSleep(10000);
 	}
 	
-	public void AcceptClientConnections(){
-		//Listen for client requests and accept connections
-		try {
-			while (true) {
-				try {
-					socket = listener.accept();
-				} catch (IOException e1) {
-					System.out.println("Connection Broken");
-					System.exit(1);
-				}
-			}
-		}
-		finally {
-			try {
-				listener.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+	
 }

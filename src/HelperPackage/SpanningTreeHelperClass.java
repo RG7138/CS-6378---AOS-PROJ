@@ -5,15 +5,14 @@ import java.util.Queue;
 public class SpanningTreeHelperClass {
 	
 	static int[] parent;
-	//Function that returns parent
+	
 	public static int getParent(int id) {
 		return parent[id];
 	}
 	
-	//Function that implements bfs to build spanning tree
-	public static void constructNodeTree(int[][] adjMtx){
-		boolean[] visited = new boolean[adjMtx.length];
-		parent = new int[adjMtx.length];
+	public static void constructNodeTree(int[][] Mt){
+		boolean[] visited = new boolean[Mt.length];
+		parent = new int[Mt.length];
 		Queue<Integer> queue = new LinkedList<Integer>();
 		queue.add(0);
 		parent[0] = 0;
@@ -22,8 +21,8 @@ public class SpanningTreeHelperClass {
 		visited[0] = true;
 		while(!queue.isEmpty()){
 			int node = queue.remove();
-			for(int i=0;i<adjMtx[node].length;i++){
-				if(adjMtx[node][i] == 1 && visited[i] == false){
+			for(int i=0;i<Mt[node].length;i++){
+				if(Mt[node][i] == 1 && visited[i] == false){
 					queue.add(i);
 					SpanningTreeHelperClass.parent[i] = node;
 					visited[i] = true;
