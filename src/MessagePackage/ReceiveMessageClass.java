@@ -15,36 +15,66 @@ public class ReceiveMessageClass extends Thread {
 	Socket socket;
 	ConfigStructure mapObject;
 
-	public ReceiveMessageClass(Socket csocket,ConfigStructure mapObject) {
-		this.socket = csocket;
+	public ReceiveMessageClass(Socket ClientSocket,ConfigStructure mapObject) {
+		this.socket = ClientSocket;
 		this.mapObject = mapObject;
 	}
 	
 	public void writeMsgtofile(ApplicatonMessage tmp) {
-		String fileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
+		String OutFileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
 		
 		mapObject.active = true; 
 		try {
-			File file = new File(fileName);
-			FileWriter fW;
+			File file = new File(OutFileName);
+			FileWriter fileWriter;
 			if(file.exists()){
-				fW = new FileWriter(file,true);
+				fileWriter = new FileWriter(file,true);
 			}
 			else
 			{
-				fW = new FileWriter(file);
+				fileWriter = new FileWriter(file);
 			}
-			BufferedWriter bW = new BufferedWriter(fW);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			
-			bW.write("\n"+"'"+ tmp.msg +"'"+" received from Node:"+ tmp.nodeId+"\n\n");
+			bufferedWriter.write("\n"+"'"+ tmp.msg +"'"+" received from Node:"+ tmp.nodeId+"\n\n");
 			
-			bW.close();
+			bufferedWriter.close();
 			
 		}
 		catch(Exception e) {
-			System.out.println("Error writing to file '" + fileName + "'");
+			System.out.println("Error: Unable to write to file '" + OutFileName + "'");
+			e.printStackTrace();
 		}
 		
+	}
+	
+	public void MessageListener(ObjectInputStream ois) {
+		try {
+			MessageStructure msg;
+			msg = (MessageStructure) ois.readObject();
+			// Synchronizing for multi-thread access to mapObject
+			synchronized(mapObject){
+   				//If AppMsg and node is passive becomes active only if
+				//it has sent fewer than maxNumber messages
+				if((msg instanceof ApplicatonMessage) && 
+						(mapObject.active == false) && 
+						(mapObject.msgSentCount < mapObject.maxNumber))
+				{
+			
+					ApplicatonMessage tmp = (ApplicatonMessage) msg;
+					mapObject.active = true; 
+					writeMsgtofile(tmp);
+					new SendMessageClass(mapObject).start();
+				}
+				else if(mapObject.msgSentCount == mapObject.maxNumber) {
+					System.out.println("All messages have been sent, for logs check the .out files");
+					//System.exit(3);
+				}
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void run() {
@@ -55,36 +85,7 @@ public class ReceiveMessageClass extends Thread {
 			e1.printStackTrace();
 		}
 		while(true){
-			try {
-				MessageStructure msg;
-				msg = (MessageStructure) ois.readObject();
-				// Synchronizing mapObject so that multiple threads access mapObject in a synchronized way
-				synchronized(mapObject){
-					
-       				//If AppMsg and node is passive becomes active only if
-					//it has sent fewer than maxNumber messages
-					if((msg instanceof ApplicatonMessage) && 
-							(mapObject.active == false) && 
-							(mapObject.msgSentCount < mapObject.maxNumber))
-					{
-						
-						ApplicatonMessage tmp = (ApplicatonMessage) msg;
-						
-						mapObject.active = true; 
-						
-						writeMsgtofile(tmp);
-						
-						new SendMessageClass(mapObject).start();
-					}
-					else if(mapObject.msgSentCount == mapObject.maxNumber) {
-						System.out.println("Max messages sent please check the .out files for logs");
-						//System.exit(3);
-					}
-				}
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
+			MessageListener(ois);
 		}
 	}
 }
