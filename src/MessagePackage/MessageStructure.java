@@ -10,7 +10,7 @@ public class MessageStructure implements Serializable {
 }
 
 @SuppressWarnings("serial")
-// Sends string message and vector timestamp
+// Sends message and the timestamp
 class ApplicatonMessage extends MessageStructure implements Serializable{
 	public String msg = "Test Message";
 	int nodeId;
