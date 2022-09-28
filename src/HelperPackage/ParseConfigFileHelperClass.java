@@ -57,7 +57,7 @@ public class ParseConfigFileHelperClass {
 				}
 				else if((nextConfigInfo == 1) && (Counter < mapFile.numOfNodes))
 				{	
-					if(ParsedValues[1].contains("utdallas.edu")) {
+					if(ParsedValues[1].contains("utdallas.edu") || ParsedValues[1].contains("127.0.0.1")) {
 						mapFile.nodes.add(new NodeStructure(Integer.parseInt(ParsedValues[0]),ParsedValues[1],Integer.parseInt(ParsedValues[2])));
 					}
 					else {
