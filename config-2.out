@@ -1,0 +1,117 @@
+
+'Test Message' received from Node:1
+
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:1
+
+'Test Message' received from Node:1
+
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+
+'Test Message' received from Node:3
+
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+
+'Test Message' received from Node:0
+
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+
+'Test Message' received from Node:3
+
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:3
+
+'Test Message' received from Node:0
+
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:0
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+
+'Test Message' received from Node:3
+
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:3
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:0
+
+Snap Number - 1
+0 0 0 0 
+Snap Number - 2
+15 20 15 7 
+Snap Number - 3
+21 26 22 15 
+Snap Number - 4
+24 43 40 25 
+Snap Number - 5
+37 55 47 31 
+Snap Number - 6
+43 59 59 38 
+Snap Number - 7
+47 70 65 49 
+Snap Number - 8
+53 78 76 55 
+Snap Number - 9
+60 83 85 61 
+Snap Number - 10
+69 91 94 68 
+Snap Number - 11
+74 98 101 71 
+Snap Number - 12
+80 103 110 73 
+Snap Number - 13
+86 106 119 83 
+Snap Number - 14
+88 106 127 87 
+Snap Number - 15
+88 106 131 94 
+Summary - 
+
+
+Local Vector Clock-
+88 106 131 94 
+Total Application Messages Sent - 
+56
+Total Application Messages Received - 
+75
