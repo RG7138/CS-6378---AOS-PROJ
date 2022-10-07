@@ -30,11 +30,11 @@ public class SnapshotProtocolClass {
 			File file = new File(OutFileName);
 			FileWriter fileWriter;
 			if(file.exists()){
-				fileWriter = new FileWriter(file,true);
+				fileWriter = new FileWriter(file,false);
 			}
 			else
 			{
-				fileWriter = new FileWriter(file);
+				fileWriter = new FileWriter(file,false);
 			}
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			

@@ -82,7 +82,7 @@ public class ReceiveMessageClass extends Thread {
 					
 				}
 				
-				bufferedWriter.write("\nSummary - \n\n");
+				bufferedWriter.write("\n\n\nSummary - \n\n");
 				
 				bufferedWriter.write("\nLocal Vector Clock-\n");
 				for(var i:mapObject.vectorClock) {
