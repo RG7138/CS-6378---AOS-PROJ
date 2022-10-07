@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 
 import HelperPackage.ConfigStructure;
+import MessagePackage.MessageStructure.ApplicatonMessage;
 
 public class SendMessageClass extends Thread{
 	ConfigStructure mapObject;
@@ -52,10 +53,16 @@ public class SendMessageClass extends Thread{
 
 				if(mapObject.active == true){
 					//sending application message
+					
+					mapObject.vectorClock[mapObject.id]++;
+					
 					ApplicatonMessage appmsg = new ApplicatonMessage(); 
 
 					appmsg.nodeId = mapObject.id;
-
+					
+					appmsg.vectorClock = new int[mapObject.vectorClock.length];
+					System.arraycopy( mapObject.vectorClock, 0, appmsg.vectorClock, 0, mapObject.vectorClock.length );
+					
 					//Send message to the neighbor
 					try {
 						writeMsgtofile(appmsg,curNeighbor);

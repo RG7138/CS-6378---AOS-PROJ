@@ -6,6 +6,8 @@ import HelperPackage.ParseConfigFileHelperClass;
 import HelperPackage.ServerConnectionHelperClass;
 import HelperPackage.SpanningTreeHelperClass;
 import MessagePackage.SendMessageClass;
+import MessagePackage.SnapshotHandlerClass;
+import MessagePackage.SnapshotProtocolClass;
 
 public class Main {
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -43,12 +45,20 @@ public class Main {
 		catch(Exception e){
 			System.out.println("Error occured while parsing ConfigFile:->"+e);
 		}
-
+		
+		mapObject.vectorClock = new int[mapObject.numOfNodes];
+		mapObject.setValues(mapObject);
+		
+		
 		//Initially node 0 is active therefore if this node is 0 then it should be active
 		if(curNode == 0){
 			mapObject.active = true;		
-				
+			
+			//new SnapshotProtocolClass().iniateSnapshot(mapObject);
+			
 			new SendMessageClass(mapObject).start();
+			new SnapshotHandlerClass(mapObject).start();
+			
 		}
 		
 		server.AcceptClientConnections(); //Listen for client connections

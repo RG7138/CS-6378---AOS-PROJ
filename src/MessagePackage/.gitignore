@@ -9,3 +9,10 @@
 /ReceiveMessageClass.class
 /ReceiveThread.class
 /ApplicatonMessage.class
+/MarkerMsg.class
+/SnapshotProtocolClass.class
+/StateMsg.class
+/SnapshotHandlerClass.class
+/MessageStructure$ApplicatonMessage.class
+/MessageStructure$MarkerMsg.class
+/MessageStructure$StateMsg.class
