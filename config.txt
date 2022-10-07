@@ -1,5 +1,5 @@
 # nodes minPerActive maxPerActive minSendDelay snapshotDelay(ms) maxNumber
-4 6 10 100 500 50
+4 6 10 10 50 50
 
 #0 dc01 6010 # nodeID hostName listen Port
 #1 dc02 6010
