@@ -1,53 +1,35 @@
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:1
-Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-
-'Test Message' received from Node:2
-
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 
-'Test Message' received from Node:2
+'Test Message' received from Node:1
 
-Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
-Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 
 'Test Message' received from Node:2
 
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
-
-'Test Message' received from Node:2
-
-Message -'Test Message' sent to Node:2
-Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
-Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
@@ -57,54 +39,194 @@ Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:1
+
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+
+'Test Message' received from Node:2
+
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:1
+
 Message -'Test Message' sent to Node:1
 Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
 Message -'Test Message' sent to Node:1
 
 Snap Number - 1
 1 0 0 0 
 Snap Number - 2
-18 9 12 0 
+18 15 4 0 
 Snap Number - 3
-25 15 24 7 
+26 24 19 4 
 Snap Number - 4
-32 25 34 11 
+30 32 30 8 
 Snap Number - 5
-37 27 39 16 
+36 42 41 12 
 Snap Number - 6
-45 45 51 28 
+41 48 49 16 
 Snap Number - 7
-51 52 60 33 
+44 59 54 22 
 Snap Number - 8
-51 52 60 33 
+50 70 64 31 
 Snap Number - 9
-55 64 77 47 
+56 79 74 35 
 Snap Number - 10
-61 78 89 56 
+62 83 82 40 
 Snap Number - 11
-61 78 89 56 
+69 94 91 47 
 Snap Number - 12
-69 92 107 69 
+76 98 100 47 
 Snap Number - 13
-73 92 107 69 
+81 107 106 52 
 Snap Number - 14
-78 106 123 82 
+89 116 118 59 
 Snap Number - 15
-81 113 127 87 
+94 116 122 61 
 Snap Number - 16
-83 120 128 90 
+96 116 122 61 
 
 
 Summary - 
 
 
 Local Vector Clock-
-83 120 128 90 
+96 116 122 61 
 Total Application Messages Sent - 
-51
+59
 Total Application Messages Received - 
-32
+37Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:1
+
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:2
+
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:2
+
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+
+'Test Message' received from Node:2
+
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:2
+
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+
+'Test Message' received from Node:2
+
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:2
+Message -'Test Message' sent to Node:1
+Message -'Test Message' sent to Node:1
+
+Snap Number - 1
+1 0 0 0 
+Snap Number - 2
+9 6 0 0 
+Snap Number - 3
+15 14 16 6 
+Snap Number - 4
+20 23 29 12 
+Snap Number - 5
+28 34 38 18 
+Snap Number - 6
+32 39 46 21 
+Snap Number - 7
+36 42 58 31 
+Snap Number - 8
+45 55 66 37 
+Snap Number - 9
+49 60 69 41 
+Snap Number - 10
+55 72 81 52 
+Snap Number - 11
+63 83 93 61 
+Snap Number - 12
+69 90 99 65 
+Snap Number - 13
+76 96 106 67 
+Snap Number - 14
+84 105 120 78 
+Snap Number - 15
+89 105 125 78 
+Snap Number - 16
+90 105 128 78 
+
+
+Summary - 
+
+
+Local Vector Clock-
+90 105 128 78 
+Total Application Messages Sent - 
+50
+Total Application Messages Received - 
+40

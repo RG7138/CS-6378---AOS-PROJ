@@ -10,6 +10,5 @@ public class StateMsg extends MessageStructure implements Serializable{
 	public int nodeId;
 	public boolean currnodestate;
 	int[] vectorClock;
-	//public HashMap<Integer, ArrayList<ApplicatonMessage>> AppMsgLst;
 	public boolean nodeStatus = false;//Channel status
 }

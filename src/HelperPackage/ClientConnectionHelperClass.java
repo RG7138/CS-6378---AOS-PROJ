@@ -50,7 +50,7 @@ public class ClientConnectionHelperClass {
 		for(int i=0;i<mapObject.numOfNodes;i++){
 			if(mapObject.LinkMatrix[curNode][i] == 1){
 				String hostName = mapObject.information.get(i).host;
-				int port = mapObject.information.get(i).port;
+				int port = mapObject.information.get(i).portno;
 				InetAddress address = null;
 				
 				address = addressResolution(hostName);
@@ -66,7 +66,7 @@ public class ClientConnectionHelperClass {
 				
 				oos = ooswriting(client);
 				
-				mapObject.oStream.put(i, oos);	
+				mapObject.outStream.put(i, oos);	
 			}
 		}
 		System.out.println("Sample");

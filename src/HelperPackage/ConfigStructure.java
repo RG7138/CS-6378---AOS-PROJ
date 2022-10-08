@@ -5,12 +5,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import MessagePackage.MessageStructure.ApplicatonMessage;
+import MessagePackage.MessageStructure.ApplicationMessage;
 
 @SuppressWarnings("serial")
 public class ConfigStructure implements Serializable  {
 	
-	//Variables required for MAP Protocol
 	public int id;
 	public int[][] LinkMatrix;
 	public ArrayList<Integer> neighbors;
@@ -46,18 +45,23 @@ public class ConfigStructure implements Serializable  {
 	
 	public boolean MarkerSent = false;
 	
-	public HashMap<Integer,ObjectOutputStream> oStream;
-	
+	//To check if the client nodes are active or passive
 	public HashMap<Integer,Boolean> nodesLocalState;
 	
+	//To keep track of state messages received by the node
 	public HashMap<Integer,Boolean> StateMsgList;
 	
+	//To save application messages and vector clock for snapshot
 	public boolean saveLocalState = false;
 	
+	//To keep a track on in-transit messages
 	public HashMap<Integer, Boolean> nodemsgStatus;
 	
+	//Output channel for each client connection
+	public HashMap<Integer,ObjectOutputStream> outStream;
+	
 	//To check for in-transit messages
-	public HashMap<Integer,ArrayList<ApplicatonMessage>> AppMsgList;
+	public HashMap<Integer,ArrayList<ApplicationMessage>> AppMsgList;
 	
 	//Constructor to initialize all variables
 	public ConfigStructure() {
@@ -70,11 +74,13 @@ public class ConfigStructure implements Serializable  {
 		nodes = new ArrayList<NodeStructure>();
 		information = new HashMap<Integer,NodeStructure>();
 		channels = new HashMap<Integer,Socket>();
-		oStream = new HashMap<Integer,ObjectOutputStream>();	
+		outStream = new HashMap<Integer,ObjectOutputStream>();	
 		saveLocalState = false;
 		Snapshots = new ArrayList<int[]>();
 	}
 	
+	
+	//To reset the config values
 	public void setValues(ConfigStructure conf) {
 		
 		conf.MarkerMsgList = new HashMap<Integer,Boolean>();
@@ -87,11 +93,11 @@ public class ConfigStructure implements Serializable  {
 		
 		nodesLocalState =  new HashMap<Integer,Boolean>();
 		
-		conf.AppMsgList = new HashMap<Integer,ArrayList<ApplicatonMessage>>();
+		conf.AppMsgList = new HashMap<Integer,ArrayList<ApplicationMessage>>();
 		
-		for(var i:conf.channels.keySet()) {
+		for(int i:conf.channels.keySet()) {
 			
-			ArrayList<ApplicatonMessage> arrList = new ArrayList<ApplicatonMessage>();
+			ArrayList<ApplicationMessage> arrList = new ArrayList<ApplicationMessage>();
 			conf.AppMsgList.put(i, arrList);
 			
 		}

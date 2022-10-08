@@ -7,18 +7,19 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 
 import HelperPackage.ConfigStructure;
-import MessagePackage.MessageStructure.ApplicatonMessage;
+import MessagePackage.MessageStructure.ApplicationMessage;
+
 
 public class SendMessageClass extends Thread{
-	ConfigStructure mapObject;
-	public SendMessageClass(ConfigStructure mapObject) {
-		this.mapObject = mapObject;
+	ConfigStructure nodeObj;
+	public SendMessageClass(ConfigStructure nodeObj) {
+		this.nodeObj = nodeObj;
 	}
 	
-	public void writeMsgtofile(ApplicatonMessage tmp,int curNeighbor) {
-		String fileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
+	public void writeMsgtofile(ApplicationMessage tmp,int curNeighbor) {
+		String fileName = ConfigStructure.outFile + "-" + nodeObj.id + ".out";
 		
-		mapObject.active = true; 
+		nodeObj.active = true; 
 		try {
 			File file = new File(fileName);
 			FileWriter fileWriter;
@@ -45,23 +46,23 @@ public class SendMessageClass extends Thread{
 	public void sendMsgstoNeighbours(int minSendDelay,int MessagesCount) {
 		
 		for(int i=0;i<MessagesCount;i++){
-			synchronized(mapObject){
+			synchronized(nodeObj){
 				
-				//get a random neigbour id to send message
-				int NeighborNodeID = this.randomValueGenerator(0,mapObject.neighbors.size()-1);
-				int curNeighbor = mapObject.neighbors.get(NeighborNodeID);
+				//get a random neighbor id to send message
+				int NeighborNodeID = this.randomValueGenerator(0,nodeObj.neighbors.size()-1);
+				int curNeighbor = nodeObj.neighbors.get(NeighborNodeID);
 
-				if(mapObject.active == true){
-					//sending application message
+				if(nodeObj.active == true){
+					//sending application message and updating vector clock
 					
-					mapObject.vectorClock[mapObject.id]++;
+					nodeObj.vectorClock[nodeObj.id]++;
 					
-					ApplicatonMessage appmsg = new ApplicatonMessage(); 
+					ApplicationMessage appmsg = new ApplicationMessage(); 
 
-					appmsg.nodeId = mapObject.id;
+					appmsg.nodeId = nodeObj.id;
 					
-					appmsg.vectorClock = new int[mapObject.vectorClock.length];
-					System.arraycopy( mapObject.vectorClock, 0, appmsg.vectorClock, 0, mapObject.vectorClock.length );
+					appmsg.vectorClock = new int[nodeObj.vectorClock.length];
+					System.arraycopy( nodeObj.vectorClock, 0, appmsg.vectorClock, 0, nodeObj.vectorClock.length );
 					
 					//Send message to the neighbor
 					try {
@@ -70,7 +71,7 @@ public class SendMessageClass extends Thread{
 						//System.out.println("Message -" +"'"+ m.msg  +"'"+ " sent to Node:"+ curNeighbor+"\n");
 
 						//Writing to out stream object
-						ObjectOutputStream oos = mapObject.oStream.get(curNeighbor);
+						ObjectOutputStream oos = nodeObj.outStream.get(curNeighbor);
 						oos.writeObject(appmsg);	
 						oos.flush();
 
@@ -78,7 +79,7 @@ public class SendMessageClass extends Thread{
 						e.printStackTrace();
 					}	
 					
-					mapObject.msgSentCount++;
+					nodeObj.msgSentCount++;
 				}
 			}
 			
@@ -87,7 +88,7 @@ public class SendMessageClass extends Thread{
 				Thread.sleep(minSendDelay);
 			}
 			catch (Exception e) {
-				System.out.println("Error in SendMessages");
+				System.out.println("Unable to send Messages to neighbors");
 				e.printStackTrace();
 			}
 		}
@@ -96,24 +97,19 @@ public class SendMessageClass extends Thread{
 	
 	void sendMessages() throws InterruptedException{
 
-		// to get a random number between minPerActive to maxPerActive to send that many messages
+		// to get a random number between minPerActive and maxPerActive 
 		int MessagesCount = -1;
 		int minSendDelay = 0;
-		synchronized(mapObject){
-			MessagesCount = this.randomValueGenerator(mapObject.minPerActive,mapObject.maxPerActive);
-			
-			// If random number is 0 we again try to get a random number, as we can not have 0 as the number of messages to be sent
-			if(MessagesCount == 0){
-				MessagesCount = this.randomValueGenerator(mapObject.minPerActive + 1,mapObject.maxPerActive);
-			}
-			minSendDelay = mapObject.minSendDelay;
+		synchronized(nodeObj){
+			MessagesCount = this.randomValueGenerator(nodeObj.minPerActive,nodeObj.maxPerActive);
+			minSendDelay = nodeObj.minSendDelay;
 		}
 		
 		sendMsgstoNeighbours(minSendDelay,MessagesCount);
 		
-		synchronized(mapObject){
-			//  Nodes becomes passive after sending messages
-			mapObject.active = false;
+		
+		synchronized(nodeObj){
+			nodeObj.active = false;
 		}
 
 
@@ -122,13 +118,15 @@ public class SendMessageClass extends Thread{
 		try {
 			this.sendMessages();
 		} catch (Exception e) {
-			System.out.println("Error in SendMessages");
+			System.out.println("Unable to send Messages to neighbors");
 			e.printStackTrace();
 		}
 	}
-	// Function to generate random number in a given range
+	
 	int randomValueGenerator(int min,int max){
 		Random rand = new Random();
+		
+		// generates a random value between 0 and (max-min)+1.
 		int randomNum = rand.nextInt((max - min) + 1) + min;
 		return randomNum;
 	}

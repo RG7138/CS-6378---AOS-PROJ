@@ -9,29 +9,28 @@ import java.io.StreamCorruptedException;
 import java.net.Socket;
 import java.util.HashMap;
 
-import MessagePackage.MessageStructure.ApplicatonMessage;
+import MessagePackage.MessageStructure.ApplicationMessage;
 import MessagePackage.MessageStructure.MarkerMsg;
 import MessagePackage.MessageStructure.MessageStructure;
 import MessagePackage.MessageStructure.StateMsg;
 import MessagePackage.MessageStructure.TerminateMsg;
 import HelperPackage.ConfigStructure;
 
-//Read object data sent by neighboring clients
 public class ReceiveMessageClass extends Thread {
 	Socket socket;
-	ConfigStructure mapObject;
+	ConfigStructure nodeObj;
 
-	public ReceiveMessageClass(Socket ClientSocket,ConfigStructure mapObject) {
+	public ReceiveMessageClass(Socket ClientSocket,ConfigStructure nodeObj) {
 		this.socket = ClientSocket;
-		this.mapObject = mapObject;
+		this.nodeObj = nodeObj;
 	}
 	
 	public void writeMsgtofile(MessageStructure msg) {
 		
-		if(msg instanceof ApplicatonMessage) {
+		if(msg instanceof ApplicationMessage) {
 		
-			ApplicatonMessage tmp = (ApplicatonMessage)msg;
-			String OutFileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
+			ApplicationMessage tmp = (ApplicationMessage)msg;
+			String OutFileName = ConfigStructure.outFile + "-" + nodeObj.id + ".out";
 			
 			try {
 				File file = new File(OutFileName);
@@ -57,7 +56,7 @@ public class ReceiveMessageClass extends Thread {
 		}
 		else if(msg instanceof TerminateMsg) {
 			
-			String OutFileName = ConfigStructure.outFile + "-" + mapObject.id + ".out";
+			String OutFileName = ConfigStructure.outFile + "-" + nodeObj.id + ".out";
 			
 			try {
 				File file = new File(OutFileName);
@@ -72,11 +71,11 @@ public class ReceiveMessageClass extends Thread {
 				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 				
 				int count =0;
-				for(var i:mapObject.Snapshots) {
+				for(int[] i:nodeObj.Snapshots) {
 					count++;
 					bufferedWriter.write("\nSnap Number - " + count +"\n");
 					
-					for(var j: i) {
+					for(int j: i) {
 						bufferedWriter.write(j+" ");
 					}
 					
@@ -85,11 +84,11 @@ public class ReceiveMessageClass extends Thread {
 				bufferedWriter.write("\n\n\nSummary - \n\n");
 				
 				bufferedWriter.write("\nLocal Vector Clock-\n");
-				for(var i:mapObject.vectorClock) {
+				for(int i:nodeObj.vectorClock) {
 					bufferedWriter.write(i+" ");
 				}
 				
-				bufferedWriter.write("\nTotal Application Messages Sent - \n" + mapObject.msgSentCount + "\nTotal Application Messages Received - \n" + mapObject.msgReceiveCount);
+				bufferedWriter.write("\nTotal Application Messages Sent - \n" + nodeObj.msgSentCount + "\nTotal Application Messages Received - \n" + nodeObj.msgReceiveCount);
 				bufferedWriter.close();
 				
 				System.out.println("\nLogs written to file - " + OutFileName);
@@ -108,91 +107,99 @@ public class ReceiveMessageClass extends Thread {
 		try {
 			MessageStructure msg;
 			msg = (MessageStructure) ois.readObject();
-			// Synchronizing for multi-thread access to mapObject
-			synchronized(mapObject){
-   				//If AppMsg and node is passive becomes active only if
-				//it has sent fewer than maxNumber messages
-				if((msg instanceof ApplicatonMessage) && 
-						(!mapObject.active) && 
-						(mapObject.msgSentCount < mapObject.maxNumber)&& (!mapObject.saveLocalState) )  //&& (!mapObject.saveLocalState)
+			
+			synchronized(nodeObj){
+				
+				if(msg instanceof ApplicationMessage){
+					
+					//Updating vector clock on receiving an Application message
+					for(int i=0;i<nodeObj.numOfNodes;i++){
+						nodeObj.vectorClock[i] = Math.max(nodeObj.vectorClock[i], ((ApplicationMessage) msg).vectorClock[i]);
+					}
+					nodeObj.vectorClock[nodeObj.id]++;
+					
+				}
+				
+				
+   				//A passive Node on receiving an application message , will becomes active only if it has sent fewer than maxNumber messages ; 2nd condition of the MAP protocol
+				if((msg instanceof ApplicationMessage) && 
+						(!nodeObj.active) && 
+						(nodeObj.msgSentCount < nodeObj.maxNumber)&& (!nodeObj.saveLocalState) )  //&& (!nodeObj.saveLocalState)
 				{
 			
-					ApplicatonMessage tmp = (ApplicatonMessage) msg;
-					mapObject.active = true;
-					mapObject.msgReceiveCount++;
+					ApplicationMessage tmp = (ApplicationMessage) msg;
+					nodeObj.active = true;
+					nodeObj.msgReceiveCount++;
 					writeMsgtofile(tmp);
-					new SendMessageClass(mapObject).start();
+					new SendMessageClass(nodeObj).start();
 				}
-				else if((msg instanceof ApplicatonMessage) && (!mapObject.active) && (mapObject.saveLocalState)) {
+				else if((msg instanceof ApplicationMessage) && (!nodeObj.active) && (nodeObj.saveLocalState)) {
 					
-					mapObject.msgReceiveCount++;
-					int channelNo = ((ApplicatonMessage)msg).nodeId;
-					SnapshotProtocolClass.saveAppMsg(channelNo,(ApplicatonMessage)msg,mapObject);
+					nodeObj.msgReceiveCount++;
+					int channelNo = ((ApplicationMessage)msg).nodeId;
+					SnapshotProtocolClass.saveAppMsg(channelNo,(ApplicationMessage)msg,nodeObj);
 					
-				}
-				else if(msg instanceof MarkerMsg) {
-					int channelNo = ((MarkerMsg)msg).nodeId;
-					System.out.println("\nMarker Msg Received\n");
-					SnapshotProtocolClass.sendMarketMsg(mapObject,channelNo);
 				}
 				
 				else if(msg instanceof StateMsg) {
 					
 					
 					System.out.println("\nState Msg received\n");
-					if(mapObject.id == 0) {
+					if(nodeObj.id == 0) {
 						
-						mapObject.StateMsgList.put(((StateMsg)msg).nodeId, true);
+						//Keeping track of marker messages received from each node in the system
+						nodeObj.StateMsgList.put(((StateMsg)msg).nodeId, true);
 						
-						mapObject.nodesLocalState.put(((StateMsg)msg).nodeId, ((StateMsg)msg).currnodestate);
+						//Whether the node is active or passive when the snapshot was taken
+						nodeObj.nodesLocalState.put(((StateMsg)msg).nodeId, ((StateMsg)msg).currnodestate);
 						
-						mapObject.nodemsgStatus.put(((StateMsg)msg).nodeId, ((StateMsg)msg).nodeStatus);
-						//mapObject.AppMsgList.get(((StateMsg)msg).nodeId).add(msg);
+						//Each nodes in-transit message status
+						nodeObj.nodemsgStatus.put(((StateMsg)msg).nodeId, ((StateMsg)msg).nodeStatus);
 						
-						if (mapObject.StateMsgList.size() == mapObject.numOfNodes-1) {
-							//Detect Termination
+						//nodeObj.AppMsgList.get(((StateMsg)msg).nodeId).add(msg);
+						
+						if (nodeObj.StateMsgList.size() == nodeObj.numOfNodes-1) {
+							
 							System.out.println("\nAll state messages received checking for nodes active status\n");
 							
 							boolean restart = false;
 							
-							restart = SnapshotProtocolClass.Detecttermination(mapObject);
+							//Detect Termination
+							restart = SnapshotProtocolClass.Detecttermination(nodeObj);
 							
 							if(restart) {
-								mapObject.setValues(mapObject);
-								new SnapshotHandlerClass(mapObject).start();
+								nodeObj.setValues(nodeObj);
+								new SnapshotHandlerClass(nodeObj).start();
 							}
 							else {
 								System.out.println("\nAll nodes are passive, we can terminate!!!\n");
 								//System.exit(3);
 								writeMsgtofile(new TerminateMsg());
-								SnapshotProtocolClass.sendTerminateMsg(mapObject);
+								SnapshotProtocolClass.sendTerminateMsg(nodeObj);
 							}
 							
 						}
 						
 					}
 					else {
-						SnapshotProtocolClass.sendToSource(mapObject,(StateMsg)msg);
+						SnapshotProtocolClass.sendToSource(nodeObj,(StateMsg)msg);
 					}
 					
+				}
+				else if(msg instanceof MarkerMsg) {
+					int channelNo = ((MarkerMsg)msg).nodeId;
+					System.out.println("\nMarker Msg Received\n");
+					SnapshotProtocolClass.sendMarkerMsg(nodeObj,channelNo);
 				}
 				else if(msg instanceof TerminateMsg) {
 					writeMsgtofile(new TerminateMsg());
-					SnapshotProtocolClass.sendTerminateMsg(mapObject);
+					SnapshotProtocolClass.sendTerminateMsg(nodeObj);
 				}
 				else {
-					mapObject.msgReceiveCount++;
+					nodeObj.msgReceiveCount++;
 				}
 				
-				if(msg instanceof ApplicatonMessage){
-					
-					//Implementing vector protocol on receiver side
-					for(int i=0;i<mapObject.numOfNodes;i++){
-						mapObject.vectorClock[i] = Math.max(mapObject.vectorClock[i], ((ApplicatonMessage) msg).vectorClock[i]);
-					}
-					mapObject.vectorClock[mapObject.id]++;
-					
-				}
+				
 			}
 		}
 		catch(Exception e) {
