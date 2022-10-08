@@ -12,13 +12,13 @@ public class ServerConnectionHelperClass{
 	ServerSocket listener = null;
 	Socket socket = null;
 	int serverPort;
-	private ConfigStructure mapObject;
+	private ConfigStructure nodeObj;
 	InetAddress addr;
 	InetAddress addr1;
 	InetAddress addr2;
 	
 	public void AcceptClientConnections(){
-		//Listen for client requests and accept connections
+		
 		try {
 			while (true) {
 				try {
@@ -27,7 +27,7 @@ public class ServerConnectionHelperClass{
 					System.out.println("Connection Broken");
 					System.exit(1);
 				}
-				new ReceiveMessageClass(socket,mapObject).start();
+				new ReceiveMessageClass(socket,nodeObj).start();
 			}
 		}
 		finally {
@@ -43,13 +43,13 @@ public class ServerConnectionHelperClass{
 		
 		try {
 			
-			listener = new ServerSocket(serverPort,-1,InetAddress.getByName(mapObject.nodes.get(mapObject.id).host));
+			listener = new ServerSocket(serverPort,-1,InetAddress.getByName(nodeObj.nodes.get(nodeObj.id).host));
 			System.out.println(serverPort);
 			addr = listener.getInetAddress();
 			System.out.println(addr);
 		}
 		catch(BindException e) {
-			System.out.println("Failed Server Connection on Node" + mapObject.id + " : " + e.getMessage() + ", Port : " + serverPort);
+			System.out.println("Failed Server Connection on Node" + nodeObj.id + " : " + e.getMessage() + ", Port : " + serverPort);
 			System.exit(1);
 		}
 		catch (IOException e) {
@@ -67,12 +67,12 @@ public class ServerConnectionHelperClass{
 		}
 	}
 	
-	public ServerConnectionHelperClass(ConfigStructure mapObject) {
+	public ServerConnectionHelperClass(ConfigStructure nodeObj) {
 		
-		this.mapObject = mapObject; //Global mapObject
-		// port number on which this node should listen 
-		serverPort = mapObject.nodes.get(mapObject.id).port;
-		String host = mapObject.nodes.get(mapObject.id).host;
+		this.nodeObj = nodeObj; 
+		
+		serverPort = nodeObj.nodes.get(nodeObj.id).portno;
+		String host = nodeObj.nodes.get(nodeObj.id).host;
 		
 		//ServerSocket listener = null;
 		listener = CreateServer(serverPort, host);

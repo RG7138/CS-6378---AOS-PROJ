@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import HelperPackage.ConfigStructure;
 import HelperPackage.SpanningTreeHelperClass;
-import MessagePackage.MessageStructure.ApplicatonMessage;
+import MessagePackage.MessageStructure.ApplicationMessage;
 import MessagePackage.MessageStructure.MarkerMsg;
 import MessagePackage.MessageStructure.MessageStructure;
 import MessagePackage.MessageStructure.StateMsg;
@@ -19,7 +19,7 @@ public class SnapshotProtocolClass {
 	public static void iniateSnapshot(ConfigStructure obj) {
 		synchronized(obj){
 			
-			sendMarketMsg(obj,obj.id);
+			sendMarkerMsg(obj,obj.id);
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class SnapshotProtocolClass {
 			
 			
 			bufferedWriter.write("\nLocal Vector Clock-\n");
-			for(var i:obj.vectorClock) {
+			for(int i:obj.vectorClock) {
 				bufferedWriter.write(i+" ");
 			}
 			
@@ -56,15 +56,17 @@ public class SnapshotProtocolClass {
 		}
 	}
 	
+	//Node 0 has checked that all other nodes in the distributed system are passive
+	//and there are no intransit messages
 	public static void sendTerminateMsg(ConfigStructure obj) {
 		
 		synchronized (obj) {
 			
-			for(var i:obj.neighbors) {
+			for(int i:obj.neighbors) {
 				
 				TerminateMsg msg = new TerminateMsg();
 				
-				ObjectOutputStream oos = obj.oStream.get(i);
+				ObjectOutputStream oos = obj.outStream.get(i);
 				
 				try {
 					oos.writeObject(msg);
@@ -90,7 +92,8 @@ public class SnapshotProtocolClass {
 		
 	}
 	
-	public static void sendMarketMsg(ConfigStructure obj,int id) {
+	//Node on receiving markers sends marker message if not previously sent to neighbours
+	public static void sendMarkerMsg(ConfigStructure obj,int id) {
 		synchronized (obj) {
 			
 			if (obj.MarkerSent == false) {
@@ -99,13 +102,13 @@ public class SnapshotProtocolClass {
 				obj.MarkerSent = true;
 				obj.MarkerMsgList.put(id,true);
 				
-				int[] vectorCopy = new int[obj.vectorClock.length];
+				int[] localvectorclk = new int[obj.vectorClock.length];
 				
-				for(int i=0;i<vectorCopy.length;++i) {
-					vectorCopy[i] = obj.vectorClock[i];
+				for(int i=0;i<localvectorclk.length;++i) {
+					localvectorclk[i] = obj.vectorClock[i];
 				}
 				
-				obj.Snapshots.add(vectorCopy);
+				obj.Snapshots.add(localvectorclk);
 				
 				for(int i=0;i<obj.neighbors.size();++i) {
 					
@@ -114,7 +117,7 @@ public class SnapshotProtocolClass {
 					msg.nodeId = obj.id;
 					
 					
-					ObjectOutputStream oos = obj.oStream.get(obj.neighbors.get(i));
+					ObjectOutputStream oos = obj.outStream.get(obj.neighbors.get(i));
 					
 					try {
 						oos.writeObject(msg);
@@ -153,16 +156,16 @@ public class SnapshotProtocolClass {
 					else {
 						
 						obj.Snapcount++;
-						int parentid = SpanningTreeHelperClass.getParent(obj.id);
+						int parentid = SpanningTreeHelperClass.returnParent(obj.id);
 						
-						ObjectOutputStream oos = obj.oStream.get(parentid);
+						ObjectOutputStream oos = obj.outStream.get(parentid);
 						
 						try {
 							StateMsg msg = new StateMsg();
 							
 							msg.nodeId = obj.id;
 							
-							for(var i:obj.AppMsgList.keySet()) {
+							for(int i:obj.AppMsgList.keySet()) {
 								
 								if(!obj.AppMsgList.get(i).isEmpty()) {
 							
@@ -205,11 +208,12 @@ public class SnapshotProtocolClass {
 		}
 	}
 	
+	//Detect Snapsot protocol termination
 	public static boolean Detecttermination(ConfigStructure obj) {
 		synchronized (obj) {
 				
-				//checking id all nodes are passive
-				for(var i:obj.nodesLocalState.keySet()) {
+				//checking if all nodes are passive
+				for(int i:obj.nodesLocalState.keySet()) {
 		
 					if (obj.nodesLocalState.get(i)) {
 						return true;
@@ -217,8 +221,8 @@ public class SnapshotProtocolClass {
 		
 				}
 				
-				//Checking if all AppMsgLists are empty
-				for(var i : obj.nodemsgStatus.keySet()) {
+				//Checking if all AppMsgLists are empty i.e there are no in-tranist messages
+				for(int i : obj.nodemsgStatus.keySet()) {
 					
 					if(obj.nodemsgStatus.get(i)) {
 						return true;
@@ -231,18 +235,19 @@ public class SnapshotProtocolClass {
 		
 	}
 	
-	public static void saveAppMsg(int nodeId,ApplicatonMessage msg,ConfigStructure obj) {
+	//updates application message list for every node
+	public static void saveAppMsg(int nodeId,ApplicationMessage msg,ConfigStructure obj) {
 		
 		synchronized (obj) {
 			
 			if(obj.MarkerMsgList.get(nodeId) == false) {
 				
 				if((obj.AppMsgList.get(nodeId).isEmpty())){
-					ArrayList<ApplicatonMessage> msgList = obj.AppMsgList.get(nodeId);
+					ArrayList<ApplicationMessage> msgList = obj.AppMsgList.get(nodeId);
 					msgList.add(msg);
-					obj.AppMsgList.put(nodeId, msgList); // add to Hash map
+					obj.AppMsgList.put(nodeId, msgList); // update node object
 				}
-				// if the ArrayList is already there just add this message to it
+				// Update the MsgList if it already exists
 				else if(!(obj.AppMsgList.get(nodeId).isEmpty())){
 					obj.AppMsgList.get(nodeId).add(msg);
 				}
@@ -253,12 +258,13 @@ public class SnapshotProtocolClass {
 		
 	}
 	
+	//propogates state message to parent eventually reaching Node 0
 	public static void sendToSource(ConfigStructure obj,StateMsg msg) {
 		
 		synchronized (obj) {
-			int parentid = SpanningTreeHelperClass.getParent(obj.id);
+			int parentid = SpanningTreeHelperClass.returnParent(obj.id);
 				
-			ObjectOutputStream oos = obj.oStream.get(parentid);
+			ObjectOutputStream oos = obj.outStream.get(parentid);
 			
 			try {
 				oos.writeObject(msg);
@@ -268,9 +274,7 @@ public class SnapshotProtocolClass {
 				e.printStackTrace();
 			}
 		}
-			
-			
-			
+					
 	} 
 	
 }

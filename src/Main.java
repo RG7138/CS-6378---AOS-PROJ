@@ -26,7 +26,7 @@ public class Main {
 		ConfigStructure.outFile = mapObject.configFile.substring(0,mapObject.configFile.lastIndexOf('.'));
 		
 		//Build converge cast spanning tree
-		SpanningTreeHelperClass.constructNodeTree(mapObject.LinkMatrix);
+		SpanningTreeHelperClass.buildSpanningTree(mapObject.LinkMatrix);
 		
 		// Transfer the collection of nodes from ArrayList to hash map nodes
 		for(int i=0;i<mapObject.nodes.size();i++){

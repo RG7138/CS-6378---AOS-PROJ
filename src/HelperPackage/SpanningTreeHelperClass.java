@@ -6,18 +6,19 @@ public class SpanningTreeHelperClass {
 	
 	static int[] parent;
 	
-	public static int getParent(int id) {
+	public static int returnParent(int id) {
 		return parent[id];
 	}
 	
-	public static void constructNodeTree(int[][] Mt){
+	//Breadth first search algo. to construct the spanning tree
+	public static void buildSpanningTree(int[][] Mt){
 		boolean[] visited = new boolean[Mt.length];
 		parent = new int[Mt.length];
 		Queue<Integer> queue = new LinkedList<Integer>();
 		queue.add(0);
 		parent[0] = 0;
-		//If its already visited then no need to visit again since its done in bfs tree , nodes 
-		//visited at first level will have direct parents and so on
+		
+		//dont visit if already visited, 
 		visited[0] = true;
 		while(!queue.isEmpty()){
 			int node = queue.remove();

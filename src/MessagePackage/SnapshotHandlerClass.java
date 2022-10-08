@@ -28,6 +28,8 @@ public class SnapshotHandlerClass extends Thread{
 		}
 		
 		System.out.println("\nSnap Shot Number - " + (conf.Snapcount));
+		
+		//Starting point for the Snapshot Protocol
 		SnapshotProtocolClass.iniateSnapshot(conf);
 	}
 	
